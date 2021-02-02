@@ -15,13 +15,13 @@
     state: directory
 
 - name: Create a ext4 filesystem on /dev/sdb
-  when: inventory_hostname in groups['kube-node']
+  when: inventory_hostname in groups['local-path-provisioner']
   filesystem:
     fstype: ext4
     dev: /dev/sdb
 
 - name: Mount /dev/sdb to data dir
-  when: inventory_hostname in groups['kube-node']
+  when: inventory_hostname in groups['local-path-provisioner']
   mount:
     fstype: ext4
     src: /dev/sdb
