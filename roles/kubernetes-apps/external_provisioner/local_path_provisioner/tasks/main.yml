@@ -9,6 +9,10 @@
   when:
     - inventory_hostname == groups['kube-master'][0]
 
+- name: Print the gateway for each host when defined
+  ansible.builtin.debug:
+    msg: Find {{ inventory_hostname }} hostname in {{ groups['kube-node'] }}
+
 - name: Local Path Provisioner | Create claim root dir
   file:
     path: "{{ local_path_provisioner_claim_root }}"
