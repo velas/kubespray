@@ -14,28 +14,25 @@
     path: "{{ local_path_provisioner_claim_root }}"
     state: directory
 
-- name: install parted
-  package:
-    name: parted
-    state: present
-  when: inventory_hostname in groups['kube-node']
-
-- parted:
-    device: /dev/sdb
-    number: 1
-    flags: [ lvm ]
-    state: present
-  when: inventory_hostname in groups['kube-node']
 
 - name: Create a ext4 filesystem on /dev/sdb
   filesystem:
     fstype: ext4
-    dev: /dev/sdb1
+    dev: /dev/sdb
+  when: inventory_hostname in groups['kube-node']
+
+- name: Local Volume Provisioner | Create addon dir
+  file:
+    path: "/data"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
   when: inventory_hostname in groups['kube-node']
 
 - mount:
     fstype: ext4
-    src: /dev/sdb1
+    src: /dev/sdb
     path: /data
     state: mounted
   when: inventory_hostname in groups['kube-node']
